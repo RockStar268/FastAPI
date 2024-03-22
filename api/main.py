@@ -7,7 +7,7 @@ app = FastAPI()
 
 class ProductList(BaseModel):
     name: str
-    price: float = 0
+    price: float = 0.00
     product_category: str
     stock: int = 0
     availability: bool = False
@@ -16,7 +16,7 @@ class ProductList(BaseModel):
 items = []
 
 
-@app.get("/item")
+@app.get("/item/")
 async def get_all_items():
     return items
 
@@ -30,8 +30,7 @@ async def get_item(id: int):
         return {'message': Messages.NOT_FOUND}
 
 
-
-@app.post("/item")
+@app.post("/item/")
 async def add_items(item: ProductList):
     items.append(item)
     return items
