@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from enums.Messages import Messages
 
-app = FastAPI()
+fast_app = FastAPI()
 
 
 class ProductList(BaseModel):
@@ -16,21 +16,21 @@ class ProductList(BaseModel):
 items = []
 
 
-@app.get("/item/")
+@fast_app.get("/product/")
 async def get_all_items():
     return items
 
 
-@app.get("/item/{id}")
-async def get_item(id: int):
+@fast_app.get("/product/{product_id}")
+async def get_item(product_id: int):
     try:
-        if items[id]:
-            return items[id]
+        if items[product_id]:
+            return items[product_id]
     except IndexError:
         return {'message': Messages.NOT_FOUND}
 
 
-@app.post("/item/")
+@fast_app.post("/product/")
 async def add_items(item: ProductList):
     items.append(item)
     return items
