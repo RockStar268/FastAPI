@@ -7,4 +7,4 @@ Execute the following command:
 pip install -r requirements.txt
 
 To run the application app: 
-uvicorn main:app --reload    
+uvicorn api.main:fast_app --reload
