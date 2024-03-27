@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Query
-from pydantic import BaseModel, validator
+from pydantic import BaseModel
 from enums.Messages import Messages
 from typing import Annotated
 import re
@@ -37,13 +37,14 @@ class Products:
             if items[product_id]:
                 return items[product_id]
         except IndexError:
-            return {'message': Messages.NOT_FOUND}
+            return {'message': Messages.ITEM_NOT_FOUND}
 
 
     @fast_app.post("/product/")
     async def add_items(item: ProductList):
         items.append(item)
         return item
+    
     
 class Users:
     @fast_app.post("/users/")
@@ -55,4 +56,12 @@ class Users:
     async def get_all_users():
         return Messages.NO_USERS_FOUND if users == [] else users
         
+    @fast_app.get("/users/{user_id}")
+    async def get_user(user_id: int):
+        try:
+            if users[user_id]:
+                return users[user_id]
+        except IndexError:
+            return {'message': Messages.USER_NOT_FOUND}
+
     

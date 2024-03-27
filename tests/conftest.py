@@ -46,3 +46,20 @@ def invalid_product_item_list():
         "availability": False,
         }
 
+@pytest.fixture()
+def valid_user():
+    return {
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "John@Doe.com",
+        "password": "JonhDoe123"
+    }
+
+@pytest.fixture()
+def invalid_user():
+    return {
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "@Doe.com",
+        "password": "JonhDoe123"
+    }
