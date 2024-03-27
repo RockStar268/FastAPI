@@ -6,13 +6,16 @@ import re
 
 fast_app = FastAPI()
 
+items = []
+users = []
 
 class ProductList(BaseModel):
-    name: str
-    price: float = 0.00
-    product_category: str
-    stock: int = 0
-    availability: bool = False
+    name: Annotated[str, Query(min_length=3, max_length=50)]
+    price: Annotated[float, Query()] = 0.00
+    product_category: Annotated[str, Query(min_length=1, max_length=20)]
+    stock: Annotated[int, Query()] = 0
+    availability: Annotated[bool, Query()] = False
+
 
 class User(BaseModel):
     first_name: Annotated[str, Query(max_length=50)] = None
@@ -20,12 +23,12 @@ class User(BaseModel):
     email: Annotated[str, Query(max_length=50, pattern=r'^[\w\.-]+@[\w\.-]+\.[a-zA-Z]+$')]
     password: Annotated[str, Query(min_length=8 ,max_length=50)]
 
-items = []
+
 
 class Products:
     @fast_app.get("/product/")
     async def get_all_items():
-        return items
+        return Messages.NO_ITEMS_FOUND if items == [] else items
 
 
     @fast_app.get("/product/{product_id}")
@@ -40,9 +43,16 @@ class Products:
     @fast_app.post("/product/")
     async def add_items(item: ProductList):
         items.append(item)
-        return items
+        return item
     
-    class Users:
-        @fast_app.post("/users/")
-        async def add_user(user: User):
-            return user
+class Users:
+    @fast_app.post("/users/")
+    async def add_user(user: User):
+        users.append(user)
+        return user
+        
+    @fast_app.get("/users/")
+    async def get_all_users():
+        return Messages.NO_USERS_FOUND if users == [] else users
+        
+    
