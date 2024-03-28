@@ -72,10 +72,12 @@ class Users:
         users.append(user)
         return user
         
+
     @fast_app.get("/users/")
     async def get_all_users():
         return {'message': Messages.NO_USERS_FOUND} if users == [] else users
         
+
     @fast_app.get("/users/{user_id}")
     async def get_user(user_id: int):
         try:
@@ -85,3 +87,23 @@ class Users:
             return {'message': Messages.USER_NOT_FOUND}
 
     
+    @fast_app.put("/users/{user_id}/update")
+    async def update_user(user_id: int, updated_user: User):
+        try:
+            if users[user_id]:
+                users[user_id] = dict(updated_user)
+                return users[user_id]
+        except IndexError:
+            return {'message': Messages.USER_NOT_FOUND}
+
+
+
+    @fast_app.delete("/users/{user_id}/delete")
+    async def delete_user(user_id: int):
+        try:
+            if users[user_id]:
+                users.pop(user_id)
+                return {'message': Messages.USER_DELETED}
+        except IndexError:
+            return {'message': Messages.USER_NOT_FOUND}
+        

@@ -9,3 +9,5 @@ class Messages(str, Enum):
 
     NO_USERS_FOUND = "No Users Found"
     USER_NOT_FOUND = "User Not Found"
+    USER_DELETED = "Selected User Is Deleted"
+    
