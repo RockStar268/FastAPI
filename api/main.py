@@ -26,12 +26,12 @@ class User(BaseModel):
 
 
 class Products:
-    @fast_app.get("/product/")
+    @fast_app.get("/product/", tags=["Products"])
     async def get_all_items():
         return {'message': Messages.NO_ITEMS_FOUND} if items == [] else items
 
 
-    @fast_app.get("/product/{product_id}")
+    @fast_app.get("/product/{product_id}", tags=["Products"])
     async def get_item(product_id: int):
         try:
             if items[product_id]:
@@ -40,13 +40,13 @@ class Products:
             return {'message': Messages.ITEM_NOT_FOUND}
 
 
-    @fast_app.post("/product/")
+    @fast_app.post("/product/", tags=["Products"])
     async def add_items(item: ProductList):
         items.append(item)
         return item
     
     
-    @fast_app.put("/product/{product_id}/update/")
+    @fast_app.put("/product/{product_id}/update/", tags=["Products"])
     async def update_item(product_id: int, updated_item: ProductList):
         try:
             if items[product_id]:
@@ -56,7 +56,7 @@ class Products:
             return {'message': Messages.ITEM_NOT_FOUND}
         
 
-    @fast_app.delete("/product/{product_id}/delete/")
+    @fast_app.delete("/product/{product_id}/delete/", tags=["Products"])
     async def update_item(product_id: int):
         try:
             if items[product_id]:
@@ -67,18 +67,18 @@ class Products:
     
     
 class Users:
-    @fast_app.post("/users/")
+    @fast_app.post("/users/", tags=["Users"])
     async def add_user(user: User):
         users.append(user)
         return user
         
 
-    @fast_app.get("/users/")
+    @fast_app.get("/users/", tags=["Users"])
     async def get_all_users():
         return {'message': Messages.NO_USERS_FOUND} if users == [] else users
         
 
-    @fast_app.get("/users/{user_id}")
+    @fast_app.get("/users/{user_id}", tags=["Users"])
     async def get_user(user_id: int):
         try:
             if users[user_id]:
@@ -87,7 +87,7 @@ class Users:
             return {'message': Messages.USER_NOT_FOUND}
 
     
-    @fast_app.put("/users/{user_id}/update")
+    @fast_app.put("/users/{user_id}/update", tags=["Users"])
     async def update_user(user_id: int, updated_user: User):
         try:
             if users[user_id]:
@@ -98,7 +98,7 @@ class Users:
 
 
 
-    @fast_app.delete("/users/{user_id}/delete")
+    @fast_app.delete("/users/{user_id}/delete", tags=["Users"])
     async def delete_user(user_id: int):
         try:
             if users[user_id]:
