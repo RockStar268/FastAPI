@@ -54,7 +54,7 @@ class Products:
                 return items[product_id]
         except IndexError:
             return {'message': Messages.ITEM_NOT_FOUND}
-    
+        
 
     @fast_app.delete("/product/{product_id}/delete/")
     async def update_item(product_id: int):

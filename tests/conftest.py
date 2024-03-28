@@ -13,16 +13,6 @@ def api_client():
     return TestClient(fast_app)
 
 
-@pytest.fixture()
-def valid_second_product_item_list():
-    products = {
-        "name": "Item 2",
-        "price": 5.00,
-        "product_category": "Engineer",
-        "stock": 500,
-        "availability": True,
-        }
-    return products
 
 @pytest.fixture()
 def valid_single_product_item_list():
@@ -33,9 +23,45 @@ def valid_single_product_item_list():
         "stock": 0,
         "availability": False,
         }
-    
     return product
-        
+
+
+@pytest.fixture()
+def valid_second_product_item_list():
+    product = {
+        "name": "Item 2",
+        "price": 5.00,
+        "product_category": "Engineer",
+        "stock": 500,
+        "availability": True,
+        }
+    return product
+
+
+@pytest.fixture()
+def valid_updated_product_item_list():
+    product = {
+        "name": "Updated Item",
+        "price": 5.00,
+        "product_category": "Engineer",
+        "stock": 500,
+        "availability": True,
+        }
+    return product
+
+
+@pytest.fixture()
+def invalid_updated_product_item_list():
+    product = {
+        "name": "Invalid Item",
+        "price": "Invalid Price",
+        "product_category": "Engineer",
+        "stock": 500,
+        "availability": True,
+        }
+    return product
+
+
 @pytest.fixture()
 def invalid_product_item_list():
     return {
