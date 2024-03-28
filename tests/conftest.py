@@ -89,3 +89,22 @@ def invalid_user():
         "email": "@Doe.com",
         "password": "JonhDoe123"
     }
+
+
+@pytest.fixture()
+def update_with_valid_user():
+    return {
+        "first_name": "Updated",
+        "last_name": "Valid User",
+        "email": "Updated@Doe.com",
+        "password": "JonhDoe123"
+    }
+
+@pytest.fixture()
+def update_with_invalid_user():
+    return {
+        "first_name": "Updated",
+        "last_name": "Valid User",
+        "email": "Updated@Doe.",
+        "password": "JonhDoe123"
+    }

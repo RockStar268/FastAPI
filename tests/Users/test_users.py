@@ -61,3 +61,41 @@ def test_add_valid_user(api_client, valid_user):
 def test_add_invalid_user(api_client, invalid_user):
     response = api_client.post("/users/", json=invalid_user)
     assert response.status_code == 422
+
+
+#@fast_app.put("/users/{user_id}/update")
+def test_update_existing_user(api_client, update_with_valid_user):
+    user_id = 0
+    response = api_client.put(f"/users/{user_id}/update", json=update_with_valid_user)
+    assert response.status_code == 200
+    assert response.json() == update_with_valid_user
+
+
+#@fast_app.put("/users/{user_id}/update")
+def test_update_non_existing_user_with_valid_user(api_client, update_with_valid_user):
+    user_id = 10
+    response = api_client.put(f"/users/{user_id}/update", json=update_with_valid_user)
+    assert response.status_code == 200
+    assert response.json()['message'] == Messages.USER_NOT_FOUND
+
+#@fast_app.put("/users/{user_id}/update")
+def test_update_existing_user_with_invalid_user(api_client, update_with_invalid_user):
+    user_id = 0
+    response = api_client.put(f"/users/{user_id}/update", json=update_with_invalid_user)
+    assert response.status_code == 422
+
+
+#@fast_app.delete("/users/{user_id}/delete")
+def test_delete_existing_user(api_client):
+    user_id = 0
+    response = api_client.delete(f"/users/{user_id}/delete")
+    assert response.status_code == 200
+    assert response.json()['message'] == Messages.USER_DELETED
+
+#@fast_app.delete("/users/{user_id}/delete")
+def test_delete_non_existing_user(api_client):
+    user_id = 10
+    response = api_client.delete(f"/users/{user_id}/delete")
+    assert response.status_code == 200
+    assert response.json()['message'] == Messages.USER_NOT_FOUND
+

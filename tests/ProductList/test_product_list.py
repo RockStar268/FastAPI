@@ -84,7 +84,7 @@ def test_update_existing_item(api_client, valid_updated_product_item_list):
 
 
 #@fast_app.put("/product/{product_id}/update/")
-def test_update_non_existing_item_valid_item(api_client, valid_updated_product_item_list):
+def test_update_non_existing_item__with_valid_item(api_client, valid_updated_product_item_list):
     product_id = 10
     response = api_client.put(f"/product/{product_id}/update", json=valid_updated_product_item_list)
     assert response.status_code == 200
@@ -92,7 +92,7 @@ def test_update_non_existing_item_valid_item(api_client, valid_updated_product_i
 
 
 #@fast_app.put("/product/{product_id}/update/")
-def test_update_non_existing_item_invalid_item(api_client, invalid_updated_product_item_list):
+def test_update_existing_item_with_invalid_item(api_client, invalid_updated_product_item_list):
     product_id = 0
     response = api_client.put(f"/product/{product_id}/update", json=invalid_updated_product_item_list)
     assert response.status_code == 422
