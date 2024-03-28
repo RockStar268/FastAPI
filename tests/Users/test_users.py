@@ -47,7 +47,7 @@ def test_user_base_model(first_name, last_name, email, password, expected_result
 def test_get_all_users(api_client):
     response = api_client.get("/users/")
     assert response.status_code == 200
-    assert response.json() == Messages.NO_USERS_FOUND
+    assert response.json()['message'] == Messages.NO_USERS_FOUND
 
 
 #@fast_app.get("/users/")

@@ -35,7 +35,7 @@ def test_product_list_base_model(name, price, category, stock, availability, exp
 def test_no_products(api_client):
     response = api_client.get("/product/")
     assert response.status_code == 200
-    assert response.json() == Messages.NO_ITEMS_FOUND
+    assert response.json()['message'] == Messages.NO_ITEMS_FOUND
 
 
 #@fast_app.post("/product/")
