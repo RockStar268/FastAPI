@@ -34,8 +34,8 @@ def test_product_list_base_model(name, price, category, stock, availability, exp
 #@fast_app.get("/product/")
 def test_no_products(api_client):
     response = api_client.get("/product/")
-    assert response.status_code == 200
-    assert response.json()['message'] == Messages.NO_ITEMS_FOUND
+    assert response.status_code == 404
+    assert response.json()['detail'] == Messages.NO_ITEMS_FOUND
 
 
 #@fast_app.post("/product/")
@@ -71,8 +71,8 @@ def test_get_single_product(api_client, valid_second_product_item_list):
 def test_get_single_product_not_found(api_client):
     product_id = 2
     response = api_client.get(f"/product/{product_id}")
-    assert response.status_code == 200
-    assert response.json()['message'] == Messages.ITEM_NOT_FOUND
+    assert response.status_code == 404
+    assert response.json()['detail'] == Messages.ITEM_NOT_FOUND
 
 
 #@fast_app.put("/product/{product_id}/update/")
@@ -87,8 +87,8 @@ def test_update_existing_item(api_client, valid_updated_product_item_list):
 def test_update_non_existing_item__with_valid_item(api_client, valid_updated_product_item_list):
     product_id = 10
     response = api_client.put(f"/product/{product_id}/update", json=valid_updated_product_item_list)
-    assert response.status_code == 200
-    assert response.json()['message'] == Messages.ITEM_NOT_FOUND
+    assert response.status_code == 404
+    assert response.json()['detail'] == Messages.ITEM_NOT_FOUND
 
 
 #@fast_app.put("/product/{product_id}/update/")
@@ -110,5 +110,5 @@ def test_delete_existing_item(api_client):
 def test_delete_non_existing_item(api_client):
     product_id = 50
     response = api_client.delete(f"/product/{product_id}/delete/")
-    assert response.status_code == 200
-    assert response.json()['message'] == Messages.ITEM_NOT_FOUND
+    assert response.status_code == 404
+    assert response.json()['detail'] == Messages.ITEM_NOT_FOUND

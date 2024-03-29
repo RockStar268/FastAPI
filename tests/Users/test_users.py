@@ -1,7 +1,7 @@
 import json
 from pydantic import ValidationError
 import pytest
-from api.main import  User
+from api.main import BaseUser, CreateUser
 from enums.Messages import Messages
 
 
@@ -25,7 +25,7 @@ from enums.Messages import Messages
                           ])
 def test_user_base_model(first_name, last_name, email, password, expected_results):
     if expected_results:
-        user = User(first_name=first_name,
+        user = CreateUser(first_name=first_name,
                 last_name=last_name,
                 email=email,
                 password=password
@@ -36,7 +36,7 @@ def test_user_base_model(first_name, last_name, email, password, expected_result
         assert user.password == password
     else: 
         with pytest.raises(ValidationError):
-            user = User(first_name=first_name,
+            user = CreateUser(first_name=first_name,
                 last_name=last_name,
                 email=email,
                 password=password
@@ -46,21 +46,44 @@ def test_user_base_model(first_name, last_name, email, password, expected_result
 #@fast_app.get("/users/")
 def test_get_all_users(api_client):
     response = api_client.get("/users/")
-    assert response.status_code == 200
-    assert response.json()['message'] == Messages.NO_USERS_FOUND
+    assert response.status_code == 404
+    assert response.json()['detail'] == Messages.NO_USERS_FOUND
 
 
-#@fast_app.get("/users/")
+#@fast_app.post("/users/")
 def test_add_valid_user(api_client, valid_user):
     response = api_client.post("/users/", json=valid_user)
     assert response.status_code == 200
-    assert response.json() == valid_user
+    assert response.json()['first_name'] == valid_user['first_name']
+    assert response.json()['last_name'] == valid_user['last_name']
+    assert response.json()['email'] == valid_user['email']
+    assert valid_user['password'] not in response.json()
 
 
-#@fast_app.get("/users/")
+#@fast_app.post("/users/")
 def test_add_invalid_user(api_client, invalid_user):
     response = api_client.post("/users/", json=invalid_user)
     assert response.status_code == 422
+
+
+
+#@fast_app.get("/users/{user_id}")
+def test_get_existing_user(api_client):
+    user_id = 0
+    response = api_client.get(f"/users/{user_id}")
+    assert response.status_code == 200
+    assert 'first_name' in response.json()
+    assert 'last_name' in response.json()
+    assert 'email' in response.json()
+    assert 'password' not in response.json()
+
+
+#@fast_app.get("/users/{user_id}")
+def test_get_non_existing_user(api_client):
+    user_id = 10
+    response = api_client.get(f"/users/{user_id}")
+    assert response.status_code == 404
+    assert response.json()['detail'] == Messages.USER_NOT_FOUND
 
 
 #@fast_app.put("/users/{user_id}/update")
@@ -68,15 +91,20 @@ def test_update_existing_user(api_client, update_with_valid_user):
     user_id = 0
     response = api_client.put(f"/users/{user_id}/update", json=update_with_valid_user)
     assert response.status_code == 200
-    assert response.json() == update_with_valid_user
+    assert response.json()['first_name'] == update_with_valid_user['first_name']
+    assert response.json()['last_name'] == update_with_valid_user['last_name']
+    assert response.json()['email'] == update_with_valid_user['email']
+    assert update_with_valid_user['password'] not in response.json()
+
 
 
 #@fast_app.put("/users/{user_id}/update")
 def test_update_non_existing_user_with_valid_user(api_client, update_with_valid_user):
     user_id = 10
     response = api_client.put(f"/users/{user_id}/update", json=update_with_valid_user)
-    assert response.status_code == 200
-    assert response.json()['message'] == Messages.USER_NOT_FOUND
+    assert response.status_code == 404
+    assert response.json()['detail'] == Messages.USER_NOT_FOUND
+
 
 #@fast_app.put("/users/{user_id}/update")
 def test_update_existing_user_with_invalid_user(api_client, update_with_invalid_user):
@@ -96,6 +124,6 @@ def test_delete_existing_user(api_client):
 def test_delete_non_existing_user(api_client):
     user_id = 10
     response = api_client.delete(f"/users/{user_id}/delete")
-    assert response.status_code == 200
-    assert response.json()['message'] == Messages.USER_NOT_FOUND
+    assert response.status_code == 404
+    assert response.json()['detail'] == Messages.USER_NOT_FOUND
 
